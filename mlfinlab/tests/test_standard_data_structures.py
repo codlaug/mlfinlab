@@ -237,10 +237,19 @@ class TestDataStructures(unittest.TestCase):
         for csv in (tick1, tick2, "test.csv"):
             os.remove(csv)
 
-    def test_df_as_batch_run_input(self):
+    @staticmethod
+    def generator_function(filepath):
         """
-        Tests that bars generated for csv file and Pandas Data Frame yield the same result
+        Creates a generator object for test_all_as_batch_run_input
         """
+        for batch in pd.read_csv(filepath, parse_dates=['Date and Time'], iterator=True, chunksize=1000):
+            yield batch
+
+    def test_all_as_batch_run_input(self):
+        """
+        Tests that bars generated with csv file, Pandas Data Frame, and generator function yield the same result
+        """
+        generator_object = generator_function(self.path)
         threshold = 100000
         tick_data = pd.read_csv(self.path)
         tick_data['Date and Time'] = pd.to_datetime(tick_data['Date and Time'])
@@ -251,14 +260,17 @@ class TestDataStructures(unittest.TestCase):
         db2 = pd.read_csv('test.csv')
         db2['date_time'] = pd.to_datetime(db2.date_time)
         db3 = ds.get_dollar_bars(tick_data, threshold=threshold, batch_size=10, verbose=False)
+        db4 = ds.get_dollar_bars(generator_object, threshold=threshold, batch_size=1000, verbose=False)
 
         # Assert diff batch sizes have same number of bars
         self.assertTrue(db1.shape == db2.shape)
         self.assertTrue(db1.shape == db3.shape)
+        self.assertTrue(db1.shape == db4.shape)
 
         # Assert same values
         self.assertTrue(np.all(db1.values == db2.values))
         self.assertTrue(np.all(db1.values == db3.values))
+        self.assertTrue(np.all(db1.values == db4.values))
 
     def test_list_as_run_input(self):
         """
