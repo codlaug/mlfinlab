@@ -237,8 +237,7 @@ class TestDataStructures(unittest.TestCase):
         for csv in (tick1, tick2, "test.csv"):
             os.remove(csv)
 
-    @staticmethod
-    def generator_function(filepath):
+    def generator_function(self, filepath):
         """
         Creates a generator object for test_all_as_batch_run_input
         """

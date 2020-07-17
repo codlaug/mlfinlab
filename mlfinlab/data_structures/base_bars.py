@@ -5,6 +5,7 @@ duplicated code.
 
 from abc import ABC, abstractmethod
 from typing import Tuple, Union, Generator, Iterable, Optional
+import types
 
 import numpy as np
 import pandas as pd
@@ -116,7 +117,6 @@ class BaseBars(ABC):
         :param file_path_or_df: (str, iterable of str, generator function, or pd.DataFrame) Path to the csv file(s) or Pandas Data Frame
                                 containing raw tick data in the format[date_time, price, volume]
         """
-        import types
 
         if isinstance(file_path_or_df, (list, tuple)):
             # Assert format of all files
