@@ -62,10 +62,10 @@ class BaseBars(ABC):
     def batch_run(self, file_path_or_df: Union[str, Iterable[str], pd.DataFrame], verbose: bool = True, to_csv: bool = False,
                   output_path: Optional[str] = None) -> Union[pd.DataFrame, None]:
         """
-        Reads csv file(s) or pd.DataFrame in batches and then constructs the financial data structure in the form of a DataFrame.
+        Reads csv file(s), pd.DataFrame or generator function in batches and then constructs the financial data structure in the form of a DataFrame.
         The csv file or DataFrame must have only 3 columns: date_time, price, & volume.
 
-        :param file_path_or_df: (str, iterable of str, or pd.DataFrame) Path to the csv file(s) or Pandas Data Frame containing
+        :param file_path_or_df: (str, iterable of str, generator function, or pd.DataFrame) Path to the csv file(s) or Pandas Data Frame containing
                                 raw tick data  in the format[date_time, price, volume]
         :param verbose: (bool) Flag whether to print message on each processed batch or not
         :param to_csv: (bool) Flag for writing the results of bars generation to local csv file, or to in-memory DataFrame
@@ -113,9 +113,11 @@ class BaseBars(ABC):
 
     def _batch_iterator(self, file_path_or_df: Union[str, Iterable[str], pd.DataFrame]) -> Generator[pd.DataFrame, None, None]:
         """
-        :param file_path_or_df: (str, iterable of str, or pd.DataFrame) Path to the csv file(s) or Pandas Data Frame
+        :param file_path_or_df: (str, iterable of str, generator function, or pd.DataFrame) Path to the csv file(s) or Pandas Data Frame
                                 containing raw tick data in the format[date_time, price, volume]
         """
+        import types
+
         if isinstance(file_path_or_df, (list, tuple)):
             # Assert format of all files
             for file_path in file_path_or_df:
@@ -131,6 +133,10 @@ class BaseBars(ABC):
 
         elif isinstance(file_path_or_df, pd.DataFrame):
             for batch in _crop_data_frame_in_batches(file_path_or_df, self.batch_size):
+                yield batch
+
+        elif isinstance(file_path_or_df, types.GeneratorType):
+            for batch in file_path_or_df:
                 yield batch
 
         else:
