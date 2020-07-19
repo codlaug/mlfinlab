@@ -260,8 +260,8 @@ class TestDataStructures(unittest.TestCase):
         self.assertTrue(np.all(db1.values == db2.values))
         self.assertTrue(np.all(db1.values == db3.values))
 
-
-    def generator_function(self, filepath):
+    @staticmethod
+    def generator_function(filepath):
         """
         Creates a generator object for test_all_as_batch_run_input
         """
@@ -272,7 +272,7 @@ class TestDataStructures(unittest.TestCase):
         """
         Tests that bars generated with csv file, Pandas Data Frame, and generator function yield the same result
         """
-        generator_object = self.generator_function(self.path)
+        generator_object = TestDataStructures.generator_function(self.path)
         threshold = 100000
         tick_data = pd.read_csv(self.path)
         tick_data['Date and Time'] = pd.to_datetime(tick_data['Date and Time'])
