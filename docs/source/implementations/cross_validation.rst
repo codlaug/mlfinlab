@@ -1,8 +1,8 @@
 .. _implementations-cross_validation:
 
-==================
-£ Cross Validation
-==================
+===================
+🔒 Cross Validation
+===================
 
 Purged and Embargo Cross Validation
 ###################################

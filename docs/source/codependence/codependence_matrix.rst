@@ -1,8 +1,8 @@
 .. _codependence-codependence_matrix:
 
-=====================
-£ Codependence Matrix
-=====================
+======================
+🔒 Codependence Matrix
+======================
 
 The functions in this part of the module are used to generate dependence and distance matrices using the codependency and
 distance metrics described previously.

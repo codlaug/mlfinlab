@@ -1,8 +1,8 @@
 .. _implementations-microstructural_features:
 
-==========================
-£ Microstructural Features
-==========================
+===========================
+🔒 Microstructural Features
+===========================
 
 This module implements features from Advances in Financial Machine Learning, Chapter 18: Entropy features and
 Chapter 19: Microstructural features

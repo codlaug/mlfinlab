@@ -1,8 +1,8 @@
 .. _implementations-feature_importance:
 
-====================
-£ Feature Importance
-====================
+=====================
+🔒 Feature Importance
+=====================
 
 .. centered::
    **Backtesting is not a research tool. Feature importance is. (Lopez de Prado)**

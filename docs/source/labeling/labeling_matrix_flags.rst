@@ -1,8 +1,8 @@
 .. _implementations-labeling_matrix_flags:
 
-=======================
-£ Labeling Matrix Flags
-=======================
+========================
+🔒 Labeling Matrix Flags
+========================
 
 The matrix flag labeling method is meant to capture trends in financial prices data, such as bull and bear flags.
 A bull flag occurs when a stock's price rapidly increases, followed by a downwards trending consolidation period, followed by a breakout

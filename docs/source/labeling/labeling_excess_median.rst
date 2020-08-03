@@ -1,8 +1,8 @@
 .. _implementations-labeling_excess_median:
 
-====================
-£ Excess Over Median
-====================
+=====================
+🔒 Excess Over Median
+=====================
 
 Labeling according to excess over median is a labeling method used in the following paper `Zhu, M., Philpotts, F. and
 Stevenson, M., 2012. The benefits of tree-based models for stock selection.

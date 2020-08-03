@@ -1,8 +1,8 @@
 .. _implementations-labeling_excess_mean:
 
-==================
-£ Excess Over Mean
-==================
+===================
+🔒 Excess Over Mean
+===================
 
 Using cross-sectional data on returns of many different stocks, each observation is labeled according to whether, or how much,
 its return exceeds the mean return. It is a common practice to label observations based on whether the return is positive or negative.

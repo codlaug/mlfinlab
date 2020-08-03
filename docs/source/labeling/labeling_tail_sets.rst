@@ -1,8 +1,8 @@
 .. _implementations-labeling_tail_sets:
 
-===========
-£ Tail Sets
-===========
+============
+🔒 Tail Sets
+============
 
 Tail set labels are a classification labeling technique introduced in the following paper: `Huerta, R., Corbacho, F. and
 Elkan, C., 2013. Nonlinear support vector machines can systematically identify stocks with high and low future returns.

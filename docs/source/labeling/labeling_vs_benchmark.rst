@@ -1,8 +1,8 @@
 .. _implementations-labeling_vs_benchmark:
 
-==========================
-£ Return Versus Benchmark
-==========================
+===========================
+🔒 Return Versus Benchmark
+===========================
 Labeling versus benchmark is featured in the paper `Evaluating multiple classifiers for stock price direction prediction, by Ballings et al.,
 2015. <https://www.sciencedirect.com/science/article/abs/pii/S0957417415003334>`_ In this paper, the authors label yearly forward
 stock returns against a predetermined benchmark, and use that labeled data to compare the performance of several machine

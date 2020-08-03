@@ -6,9 +6,9 @@
     1. `Cover, T.M., 1996. Universal Portfolios. <http://web.mit.edu/6.962/www/www_fall_2001/shaas/universal_portfolios.pdf>`_
     2. `Li, B., Hoi, S. C.H., 2012. OnLine Portfolio Selection: A Survey. ACM Comput. Surv. V, N, Article A (December 2012), 33 pages. <https://arxiv.org/abs/1212.2129>`_
 
-=====================
-£ Universal Portfolio
-=====================
+======================
+🔒 Universal Portfolio
+======================
 
 The default universal portfolio acts as a fund of funds. With the given number of inputs as experts,
 the ensemble portfolio will generate a random set of weighted CRP’s to aggregated based on the given
