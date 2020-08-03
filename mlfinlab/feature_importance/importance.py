@@ -4,18 +4,6 @@ Learning and Clustered Feature Importance algorithms as described in Chapter 6 S
 Asset Managers.
 """
 
-import pandas as pd
-import numpy as np
-from sklearn.metrics import log_loss
-import matplotlib.pyplot as plt
-
-from mlfinlab.cross_validation.cross_validation import ml_cross_val_score
-
-
-# pylint: disable=invalid-name
-# pylint: disable=invalid-unary-operand-type
-# pylint: disable=comparison-with-callable
-# pylint: disable=too-many-locals
 
 def mean_decrease_impurity(model, feature_names, clustered_subsets=None):
     """
@@ -60,30 +48,7 @@ def mean_decrease_impurity(model, feature_names, clustered_subsets=None):
                               name/s inside a list. E.g- [['I_0','I_1','R_0','R_1'],['N_1','N_2'],['R_3']]
     :return: (pd.DataFrame): Mean and standard deviation feature importance.
     """
-    # Feature importance based on in-sample (IS) mean impurity reduction
-    feature_imp_df = {i: tree.feature_importances_ for i, tree in enumerate(model.estimators_)}
-    feature_imp_df = pd.DataFrame.from_dict(feature_imp_df, orient='index')
-    feature_imp_df.columns = feature_names
-
-    # Make sure that features with zero importance are not averaged, since the only reason for a 0 is that the feature
-    # was not randomly chosen. Replace those values with np.nan
-    feature_imp_df = feature_imp_df.replace(0, np.nan)  # Because max_features = 1
-
-    if clustered_subsets is not None:
-        # Getting subset wise importance
-        importance = pd.DataFrame(index=feature_names, columns=['mean', 'std'])
-        for subset in clustered_subsets: # Iterating over each cluster
-            subset_feat_imp = feature_imp_df[subset].sum(axis=1)
-            # Importance of each feature within a subsets is equal to the importance of that subset
-            importance.loc[subset, 'mean'] = subset_feat_imp.mean()
-            importance.loc[subset, 'std'] = subset_feat_imp.std()*subset_feat_imp.shape[0]**-.5
-    else:
-        importance = pd.concat({'mean': feature_imp_df.mean(),
-                                'std': feature_imp_df.std() * feature_imp_df.shape[0] ** -0.5},
-                               axis=1)
-
-    importance /= importance['mean'].sum()
-    return importance
+    pass
 
 
 def mean_decrease_accuracy(model, X, y, cv_gen, clustered_subsets=None, sample_weight_train=None,
@@ -132,54 +97,7 @@ def mean_decrease_accuracy(model, X, y, cv_gen, clustered_subsets=None, sample_w
     :param random_state: (int) Random seed for shuffling the features.
     :return: (pd.DataFrame): Mean and standard deviation of feature importance.
     """
-
-    if sample_weight_train is None:
-        sample_weight_train = np.ones((X.shape[0],))
-
-    if sample_weight_score is None:
-        sample_weight_score = np.ones((X.shape[0],))
-
-    fold_metrics_values, features_metrics_values = pd.Series(dtype='float64'), pd.DataFrame(columns=X.columns)
-    # Generating a numpy random state object for the given random_state
-    rs_obj = np.random.RandomState(seed=random_state)
-    # Clustered feature subsets will be used for CFI if clustered_subsets exists else will operate on the single column as MDA
-    feature_sets = clustered_subsets if clustered_subsets else [[x] for x in X.columns]
-    for i, (train, test) in enumerate(cv_gen.split(X=X)):
-        fit = model.fit(X=X.iloc[train, :], y=y.iloc[train], sample_weight=sample_weight_train[train])
-        pred = fit.predict(X.iloc[test, :])
-
-        # Get overall metrics value on out-of-sample fold
-        if scoring == log_loss:
-            prob = fit.predict_proba(X.iloc[test, :])
-            fold_metrics_values.loc[i] = -scoring(y.iloc[test], prob, sample_weight=sample_weight_score[test],
-                                                  labels=model.classes_)
-        else:
-            fold_metrics_values.loc[i] = scoring(y.iloc[test], pred, sample_weight=sample_weight_score[test])
-
-        # Get feature specific metric on out-of-sample fold
-        for j in feature_sets:
-            X1_ = X.iloc[test, :].copy(deep=True)
-            for j_i in j:
-                rs_obj.shuffle(X1_[j_i].values)  # Permutation of a single column for MDA or through the whole subset for CFI
-            if scoring == log_loss:
-                prob = fit.predict_proba(X1_)
-                features_metrics_values.loc[i, j] = -scoring(y.iloc[test], prob,
-                                                             sample_weight=sample_weight_score[test],
-                                                             labels=model.classes_)
-            else:
-                pred = fit.predict(X1_)
-                features_metrics_values.loc[i, j] = scoring(y.iloc[test], pred,
-                                                            sample_weight=sample_weight_score[test])
-
-    importance = (-features_metrics_values).add(fold_metrics_values, axis=0)
-    if scoring == log_loss:
-        importance = importance / -features_metrics_values
-    else:
-        importance = importance / (1.0 - features_metrics_values).replace(0, np.nan)
-    importance = pd.concat({'mean': importance.mean(), 'std': importance.std() * importance.shape[0] ** -.5}, axis=1)
-    importance.replace([-np.inf, np.nan], 0, inplace=True)  # Replace infinite values
-
-    return importance
+    pass
 
 
 def single_feature_importance(clf, X, y, cv_gen, sample_weight_train=None, sample_weight_score=None, scoring=log_loss):
@@ -217,22 +135,7 @@ def single_feature_importance(clf, X, y, cv_gen, sample_weight_train=None, sampl
     :param scoring: (function): Scoring function used to determine importance.
     :return: (pd.DataFrame): Mean and standard deviation of feature importance.
     """
-    feature_names = X.columns
-    if sample_weight_train is None:
-        sample_weight_train = np.ones((X.shape[0],))
-
-    if sample_weight_score is None:
-        sample_weight_score = np.ones((X.shape[0],))
-
-    imp = pd.DataFrame(columns=['mean', 'std'])
-    for feat in feature_names:
-        feat_cross_val_scores = ml_cross_val_score(clf, X=X[[feat]], y=y, sample_weight_train=sample_weight_train,
-                                                   sample_weight_score=sample_weight_score,
-                                                   scoring=scoring, cv_gen=cv_gen)
-        imp.loc[feat, 'mean'] = feat_cross_val_scores.mean()
-        # pylint: disable=unsubscriptable-object
-        imp.loc[feat, 'std'] = feat_cross_val_scores.std() * feat_cross_val_scores.shape[0] ** -.5
-    return imp
+    pass
 
 
 def plot_feature_importance(importance_df, oob_score, oos_score, save_fig=False, output_path=None):
@@ -249,13 +152,4 @@ def plot_feature_importance(importance_df, oob_score, oos_score, save_fig=False,
     :param save_fig: (bool): Boolean flag to save figure to a file.
     :param output_path: (str): If save_fig is True, path where figure should be saved.
     """
-    # Plot mean imp bars with std
-    plt.figure(figsize=(10, importance_df.shape[0] / 5))
-    importance_df.sort_values('mean', ascending=True, inplace=True)
-    importance_df['mean'].plot(kind='barh', color='b', alpha=0.25, xerr=importance_df['std'], error_kw={'ecolor': 'r'})
-    plt.title('Feature importance. OOB Score:{}; OOS score:{}'.format(round(oob_score, 4), round(oos_score, 4)))
-
-    if save_fig is True:
-        plt.savefig(output_path)
-    else:
-        plt.show()
+    pass

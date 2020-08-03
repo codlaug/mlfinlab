@@ -3,8 +3,6 @@ Return in excess of mean method.
 
 Chapter 5, Machine Learning for Factor Investing, by Coqueret and Guida, (2020).
 """
-import numpy as np
-
 
 def excess_over_mean(prices, binary=False, resample_by=None, lag=True):
     """
@@ -28,24 +26,4 @@ def excess_over_mean(prices, binary=False, resample_by=None, lag=True):
     :return: (pd.DataFrame) Numerical returns in excess of the market mean return, or sign of return depending on
                 whether binary is False or True respectively.
     """
-    # Apply resample, if applicable.
-    if resample_by is not None:
-        prices = prices.resample(resample_by).last()
-
-    # Get return per period.
-    if lag:
-        returns = prices.pct_change(periods=1).shift(-1)
-    else:
-        returns = prices.pct_change(periods=1)
-
-    # Calculate median returns for each period as market return.
-    market_return = returns.mean(axis=1)
-
-    # Calculate excess over market (median) return.
-    returns_over_mean = returns.sub(market_return, axis=0)
-
-    # If binary is true, returns sign of the return over median instead of the value.
-    if binary:
-        returns_over_mean = returns_over_mean.apply(np.sign)
-
-    return returns_over_mean
+    pass

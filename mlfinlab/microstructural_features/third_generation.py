@@ -1,7 +1,6 @@
 """
 Third generation models implementation (VPIN)
 """
-import pandas as pd
 
 
 def get_vpin(volume: pd.Series, buy_volume: pd.Series, window: int = 1) -> pd.Series:
@@ -15,6 +14,4 @@ def get_vpin(volume: pd.Series, buy_volume: pd.Series, window: int = 1) -> pd.Se
     :param window: (int) Estimation window
     :return: (pd.Series) VPIN series
     """
-    sell_volume = volume - buy_volume
-    volume_imbalance = abs(buy_volume - sell_volume)
-    return volume_imbalance.rolling(window=window).mean() / volume
+    pass

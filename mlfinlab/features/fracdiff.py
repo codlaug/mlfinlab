@@ -5,12 +5,6 @@ number. Fractionally differenced series can be used as a feature in machine lear
 process.
 """
 
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-
-from statsmodels.tsa.stattools import adfuller
-
 
 class FractionalDifferentiation:
     """
@@ -43,15 +37,7 @@ class FractionalDifferentiation:
         :return: (np.ndarray) Weight vector
         """
 
-        # The algorithm below executes the iterative estimation (section 5.4.2, page 78)
-        weights = [1.]  # create an empty list and initialize the first element with 1.
-        for k in range(1, size):
-            weights_ = -weights[-1] * (diff_amt - k + 1) / k  # compute the next weight
-            weights.append(weights_)
-
-        # Now, reverse the list, convert into a numpy column vector
-        weights = np.array(weights[::-1]).reshape(-1, 1)
-        return weights
+        pass
 
     @staticmethod
     def frac_diff(series, diff_amt, thresh=0.01):
@@ -77,30 +63,7 @@ class FractionalDifferentiation:
         :return: (pd.DataFrame) Differenced series
         """
 
-        # 1. Compute weights for the longest series
-        weights = get_weights(diff_amt, series.shape[0])
-
-        # 2. Determine initial calculations to be skipped based on weight-loss threshold
-        weights_ = np.cumsum(abs(weights))
-        weights_ /= weights_[-1]
-        skip = weights_[weights_ > thresh].shape[0]
-
-        # 3. Apply weights to values
-        output_df = {}
-        for name in series.columns:
-            series_f = series[[name]].fillna(method='ffill').dropna()
-            output_df_ = pd.Series(index=series.index, dtype='float64')
-
-            for iloc in range(skip, series_f.shape[0]):
-                loc = series_f.index[iloc]
-
-                # At this point all entries are non-NAs so no need for the following check
-                # if np.isfinite(series.loc[loc, name]):
-                output_df_[loc] = np.dot(weights[-(iloc + 1):, :].T, series_f.loc[:loc])[0, 0]
-
-            output_df[name] = output_df_.copy(deep=True)
-        output_df = pd.concat(output_df, axis=1)
-        return output_df
+        pass
 
     @staticmethod
     def get_weights_ffd(diff_amt, thresh, lim):
@@ -125,28 +88,7 @@ class FractionalDifferentiation:
         :return: (np.ndarray) Weight vector
         """
 
-        weights = [1.]
-        k = 1
-
-        # The algorithm below executes the iterativetive estimation (section 5.4.2, page 78)
-        # The output weights array is of the indicated length (specified by lim)
-        ctr = 0
-        while True:
-            # compute the next weight
-            weights_ = -weights[-1] * (diff_amt - k + 1) / k
-
-            if abs(weights_) < thresh:
-                break
-
-            weights.append(weights_)
-            k += 1
-            ctr += 1
-            if ctr == lim - 1:  # if we have reached the size limit, exit the loop
-                break
-
-        # Now, reverse the list, convert into a numpy column vector
-        weights = np.array(weights[::-1]).reshape(-1, 1)
-        return weights
+        pass
 
     @staticmethod
     def frac_diff_ffd(series, diff_amt, thresh=1e-5):
@@ -174,46 +116,22 @@ class FractionalDifferentiation:
         :return: (pd.DataFrame) A data frame of differenced series
         """
 
-        # 1) Compute weights for the longest series
-        weights = get_weights_ffd(diff_amt, thresh, series.shape[0])
-        width = len(weights) - 1
-
-        # 2) Apply weights to values
-        # 2.1) Start by creating a dictionary to hold all the fractionally differenced series
-        output_df = {}
-
-        # 2.2) compute fractionally differenced series for each stock
-        for name in series.columns:
-            series_f = series[[name]].fillna(method='ffill').dropna()
-            temp_df_ = pd.Series(index=series.index, dtype='float64')
-            for iloc1 in range(width, series_f.shape[0]):
-                loc0 = series_f.index[iloc1 - width]
-                loc1 = series.index[iloc1]
-
-                # At this point all entries are non-NAs, hence no need for the following check
-                # if np.isfinite(series.loc[loc1, name]):
-                temp_df_[loc1] = np.dot(weights.T, series_f.loc[loc0:loc1])[0, 0]
-
-            output_df[name] = temp_df_.copy(deep=True)
-
-        # transform the dictionary into a data frame
-        output_df = pd.concat(output_df, axis=1)
-        return output_df
+        pass
 
 
 def get_weights(diff_amt, size):
     """ This is a pass-through function """
-    return FractionalDifferentiation.get_weights(diff_amt, size)
+    pass
 
 
 def frac_diff(series, diff_amt, thresh=0.01):
     """ This is a pass-through function """
-    return FractionalDifferentiation.frac_diff(series, diff_amt, thresh)
+    pass
 
 
 def get_weights_ffd(diff_amt, thresh, lim):
     """ This is a pass-through function """
-    return FractionalDifferentiation.get_weights_ffd(diff_amt, thresh, lim)
+    pass
 
 
 def frac_diff_ffd(series, diff_amt, thresh=1e-5):
@@ -240,7 +158,8 @@ def frac_diff_ffd(series, diff_amt, thresh=1e-5):
     :param thresh: (float) Threshold for minimum weight
     :return: (pd.DataFrame) A data frame of differenced series
     """
-    return FractionalDifferentiation.frac_diff_ffd(series, diff_amt, thresh)
+    pass
+
 
 def plot_min_ffd(series):
     """
@@ -271,27 +190,4 @@ def plot_min_ffd(series):
     :return: (plt.AxesSubplot) A plot that can be displayed or used to obtain resulting data.
     """
 
-    results = pd.DataFrame(columns=['adfStat', 'pVal', 'lags', 'nObs', '95% conf', 'corr'])
-
-    # Iterate through d values with 0.1 step
-    for d_value in np.linspace(0, 1, 11):
-        close_prices = np.log(series[['close']]).resample('1D').last()  # Downcast to daily obs
-        close_prices.dropna(inplace=True)
-
-        # Applying fractional differentiation
-        differenced_series = frac_diff_ffd(close_prices, diff_amt=d_value, thresh=0.01).dropna()
-
-        # Correlation between the original and the differentiated series
-        corr = np.corrcoef(close_prices.loc[differenced_series.index, 'close'],
-                           differenced_series['close'])[0, 1]
-        # Applying ADF
-        differenced_series = adfuller(differenced_series['close'], maxlag=1, regression='c', autolag=None)
-
-        # Results to dataframe
-        results.loc[d_value] = list(differenced_series[:4]) + [differenced_series[4]['5%']] + [corr]  # With critical value
-
-    # Plotting
-    plot = results[['adfStat', 'corr']].plot(secondary_y='adfStat', figsize=(10, 8))
-    plt.axhline(results['95% conf'].mean(), linewidth=1, color='r', linestyle='dotted')
-
-    return plot
+    pass

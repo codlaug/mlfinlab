@@ -6,8 +6,6 @@ Chapter 5, Machine Learning for Factor Investing, by Coqueret and Guida, (2020).
 Work "Evaluating multiple classifiers for stock price direction prediction" by Ballings et al. (2015) uses this method
 to label yearly returns over a predetermined value to compare the performance of several machine learning algorithms.
 """
-import numpy as np
-import pandas as pd
 
 
 def return_over_benchmark(prices, benchmark=0, binary=False, resample_by=None, lag=True):
@@ -32,24 +30,4 @@ def return_over_benchmark(prices, benchmark=0, binary=False, resample_by=None, l
     :return: (pd.Series or pd.DataFrame) Excess returns over benchmark. If binary, the labels are -1 if the
             return is below the benchmark, 1 if above, and 0 if it exactly matches the benchmark.
     """
-    # Apply resample, if applicable.
-    if resample_by is not None:
-        prices = prices.resample(resample_by).last()
-
-    # Check that index of benchmark matches index of prices, if benchmark is a pd.Series.
-    if isinstance(benchmark, pd.Series):
-        assert prices.index.equals(benchmark.index), "Index of returns and benchmark do not match. If resampling is " \
-                                                      "used, index of benchmark must match index of resampled data./" \
-
-    # Get returns from prices.
-    if lag:
-        returns = prices.pct_change(periods=1).shift(-1)
-    else:
-        returns = prices.pct_change(periods=1)
-
-    # Subtract the benchmark from returns.
-    over_benchmark = returns.sub(benchmark, axis=0)
-
-    if binary:
-        over_benchmark = over_benchmark.apply(np.sign)
-    return over_benchmark
+    pass

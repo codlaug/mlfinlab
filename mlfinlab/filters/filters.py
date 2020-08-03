@@ -4,9 +4,6 @@ used to filter events where a structural break occurs. This event is then used t
 to some event horizon, say a day.
 """
 
-import numpy as np
-import pandas as pd
-
 
 # Snippet 2.4, page 39, The Symmetric CUSUM Filter.
 def cusum_filter(raw_time_series, threshold, time_stamps=True):
@@ -36,45 +33,7 @@ def cusum_filter(raw_time_series, threshold, time_stamps=True):
     :return: (datetime index vector) Vector of datetimes when the events occurred. This is used later to sample.
     """
 
-    t_events = []
-    s_pos = 0
-    s_neg = 0
-
-    # log returns
-    raw_time_series = pd.DataFrame(raw_time_series)  # Convert to DataFrame
-    raw_time_series.columns = ['price']
-    raw_time_series['log_ret'] = raw_time_series.price.apply(np.log).diff()
-    if isinstance(threshold, (float, int)):
-        raw_time_series['threshold'] = threshold
-    elif isinstance(threshold, pd.Series):
-        raw_time_series.loc[threshold.index, 'threshold'] = threshold
-    else:
-        raise ValueError('threshold is neither float nor pd.Series!')
-
-    raw_time_series = raw_time_series.iloc[1:]  # Drop first na values
-
-    # Get event time stamps for the entire series
-    for tup in raw_time_series.itertuples():
-        thresh = tup.threshold
-        pos = float(s_pos + tup.log_ret)
-        neg = float(s_neg + tup.log_ret)
-        s_pos = max(0.0, pos)
-        s_neg = min(0.0, neg)
-
-        if s_neg < -thresh:
-            s_neg = 0
-            t_events.append(tup.Index)
-
-        elif s_pos > thresh:
-            s_pos = 0
-            t_events.append(tup.Index)
-
-    # Return DatetimeIndex or list
-    if time_stamps:
-        event_timestamps = pd.DatetimeIndex(t_events)
-        return event_timestamps
-
-    return t_events
+    pass
 
 
 def z_score_filter(raw_time_series, mean_window, std_window, z_score=3, time_stamps=True):
@@ -89,9 +48,4 @@ def z_score_filter(raw_time_series, mean_window, std_window, z_score=3, time_sta
     :param time_stamps: (bool) Default is to return a DateTimeIndex, change to false to have it return a list.
     :return: (datetime index vector) Vector of datetimes when the events occurred. This is used later to sample.
     """
-    t_events = raw_time_series[raw_time_series >= raw_time_series.rolling(window=mean_window).mean() +
-                               z_score * raw_time_series.rolling(window=std_window).std()].index
-    if time_stamps:
-        event_timestamps = pd.DatetimeIndex(t_events)
-        return event_timestamps
-    return t_events
+    pass

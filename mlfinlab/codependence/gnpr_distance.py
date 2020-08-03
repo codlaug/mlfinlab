@@ -3,10 +3,7 @@ Implementation of distance using the Generic Non-Parametric Representation appro
 clustering of financial time series and applications to credit default swaps" by Gautier Marti
 https://www.researchgate.net/publication/322714557
 """
-import numpy as np
-from scipy.stats import spearmanr
 
-# pylint: disable=invalid-name
 
 def spearmans_rho(x: np.array, y: np.array) -> float:
     """
@@ -28,10 +25,8 @@ def spearmans_rho(x: np.array, y: np.array) -> float:
     :return: (float) Spearman's rho statistical estimate
     """
 
-    # Coefficient calculationS
-    rho, _ = spearmanr(x, y)
+    pass
 
-    return rho
 
 def gpr_distance(x: np.array, y: np.array, theta: float) -> float:
     """
@@ -54,12 +49,8 @@ def gpr_distance(x: np.array, y: np.array, theta: float) -> float:
     :return: (float) Distance under GPR approach.
     """
 
-    # Calculating the GPR distance
-    distance = theta * (1 - spearmans_rho(x, y)) / 2 + \
-               (1 - theta) * (1 - ((2 * x.std() * y.std()) / (x.std()**2 + y.std()**2))**(1/2) *
-                              np.exp(- (1 / 4) * (x.mean() - y.mean())**2 / (x.std()**2 + y.std()**2)))
+    pass
 
-    return distance**(1/2)
 
 def gnpr_distance(x: np.array, y: np.array, theta: float, bandwidth: float = 0.01) -> float:
     """
@@ -81,26 +72,4 @@ def gnpr_distance(x: np.array, y: np.array, theta: float, bandwidth: float = 0.0
     :param bandwidth: (float) Bandwidth to use for splitting the X and Y vector observations. (0.01 by default)
     :return: (float) Distance under GNPR approach.
     """
-
-    # Number of observations
-    num_obs = x.shape[0]
-
-    # Calculating the d_1 distance
-    dist_1 = 3 / (num_obs * (num_obs**2 - 1)) * (np.power(x - y, 2).sum())
-
-    # Creating the proper bins
-    min_val = min(x.min(), y.min())
-    max_val = max(x.max(), y.max())
-
-    # Creating a grid and histograms
-    bins = np.arange(min_val, max_val + bandwidth, bandwidth)
-    hist_x = np.histogram(x, bins)[0] / num_obs
-    hist_y = np.histogram(y, bins)[0] / num_obs
-
-    # Calculating the d_0 distance
-    dist_0 = np.power(hist_x**(1/2) - hist_y**(1/2), 2).sum() / 2
-
-    # Calculating the GNPR distance
-    distance = theta * dist_1 + (1 - theta) * dist_0
-
-    return distance**(1/2)
+    pass
