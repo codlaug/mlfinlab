@@ -15,6 +15,8 @@ The channel has the following benefits:
 * A papers channel where we share the papers which are freely available.
 * Access to members of our research group.
 
+You can also email us at: research@hudsonthames.org
+
 Looking forward to hearing from you!
 
 .. image:: ./images/slack.png

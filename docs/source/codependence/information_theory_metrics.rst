@@ -4,9 +4,9 @@
    The following implementations and documentation, closely follows the lecture notes from Cornell University, by Marcos Lopez de Prado:
    `Codependence (Presentation Slides) <https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3512994>`_.
 
-==========================
-Information Theory Metrics
-==========================
+============================
+£ Information Theory Metrics
+============================
 
 We can gauge the codependence from the information theory perspective. In information theory, (Shannon’s) entropy is a
 measure of information (uncertainty). As described in the `Cornell lecture slides, p.13 <https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3512994>`_

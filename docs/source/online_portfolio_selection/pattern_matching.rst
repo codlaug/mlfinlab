@@ -7,9 +7,9 @@
     1. `Li, B., Hoi, S.C. and Gopalkrishnan, V., 2011. Corn: Correlation-driven nonparametric learning approach for portfolio selection. ACM Transactions on Intelligent Systems and Technology (TIST), 2(3), pp.1-29. <https://dl.acm.org/doi/pdf/10.1145/1961189.1961193>`_
     2. `Wang, Y. and Wang, D., 2019. Market Symmetry and Its Application to Pattern-Matching-Based Portfolio Selection. The Journal of Financial Data Science, 1(2), pp.78-93. <https://jfds.pm-research.com/content/1/2/78.short>`_
 
-================
-Pattern Matching
-================
+==================
+£ Pattern Matching
+==================
 
 Pattern matching locates similarly acting historical market windows and make future predictions based on the similarity.
 Traditional quantitative strategies such as momentum and mean reversion focus on the directionality of the market trends.
