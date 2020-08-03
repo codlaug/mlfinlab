@@ -90,25 +90,14 @@ ahead of the technology rather than being replaced by it."
 
 ----
 
-Unlocking the Commons
-#####################
-
-We are currently running a sponsorship model of “Unlocking the Commmons”. Our code base, online documentation,
-tutorial notebooks and presentations will remain open to everyone for so long as we can meet our minimum sponsorship
-goals. We have set the **deadline: December 2020** - for a monthly total patronage of $4000 USD.
-
-`Nadia Eghbal <https://github.com/nayafia/lemonade-stand>`_ explains it well: “If you'd like to open source a project
-but want to ensure that others will invest in its long-term maintenance, you could tell your community that you'll
-open-source the project once you've hit a certain amount of sponsorship. (Writer Tim Carmody refers to this as
-"unlocking the commons.")”
-
-`Become a Patron and keep MlFinLab Open! <https://www.patreon.com/HudsonThames>`_
-
-Documentation & Tutorials
-#########################
+Documentation, Tutorials, Videos, and Source Code
+#################################################
 
 We lower barriers to entry for all users by providing extensive `documentation <https://mlfinlab.readthedocs.io/en/latest/>`_
 and `tutorial notebooks <https://github.com/hudson-and-thames/research>`_, with code examples.
+
+We in the process of experimenting with various product ideas and models. Currently all of our tools which are private,
+are available to the various `Patreon <https://www.patreon.com/HudsonThames>`_ tiers.
 
 Who is Hudson & Thames?
 #######################
@@ -125,19 +114,19 @@ Sponsors and Donating
 #####################
 
 A special thank you to our sponsors! If you would like to become a sponsor and help support our research, please sign
-up on `Patreon <https://www.patreon.com/HudsonThames>`_
+up on `Patreon <https://www.patreon.com/HudsonThames>`_ and purchase one of our many tiers.
 
 Benefits include:
 
-1. Uninterrupted access: Should the code base pivot to closed source - your company will have access to all
-   implementations and the source code.
-2. A seat on the Hudson & Thames advisory council and votes towards the direction of research and implementations.
-3. Ongoing access to slide show presentations and Jupyter Notebooks. (files can be edited to suit your personal
-   needs such as classroom notes or client presentations.)
-4. Company / Organisation profile on `www.hudsonthames.org <https://hudsonthames.org/sponsors/>`_
-5. Use of Hudson & Thames sponsor badge on your website.
-6. Access to our communities Slack Channel.
-7. Subscription to project release updates and news.
+1. Access to source code via Github.
+2. Access to all online documentation.
+3. Access to all slide show presentations and Jupyter Notebook tutorials.
+4. Video lecture series and recordings.
+5. Company / Organisation profile on `www.hudsonthames.org <https://hudsonthames.org/sponsors/>`_
+6. Use of Hudson & Thames sponsor badge on your website.
+7. Twitter Shoutout!
+8. Access to our communities Slack Channel.
+9. Subscription to project release updates and news.
 
 
 Platinum Sponsor:
@@ -173,6 +162,8 @@ The channel has the following benefits:
 * Occasional presentations on topics within financial machine learning.
 * A papers channel where we share the papers which are freely available.
 * Access to members of our research group.
+
+You can also email us at research@hudsonthames.org
 
 Looking forward to hearing from you!
 
