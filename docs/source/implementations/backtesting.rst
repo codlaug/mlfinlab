@@ -1,8 +1,8 @@
 .. _implementations-backtesting:
 
-=======================================
+======================================
 £ A Framework for Backtest Overfitting
-=======================================
+======================================
 
 The Backtesting module contains algorithms presented in the paper of Campbell R. Harvey and Yan Liu.
 These algorithms are focused on adjusting the reported Sharpe ratios to multiple testing and calculating the required
