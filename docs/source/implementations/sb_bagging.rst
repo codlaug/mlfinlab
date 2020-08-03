@@ -1,8 +1,8 @@
 .. _implementations-sb_bagging:
 
-======================================================
-Sequentially Bootstrapped Bagging Classifier/Regressor
-======================================================
+========================================================
+£ Sequentially Bootstrapped Bagging Classifier/Regressor
+========================================================
 
 In sampling section we have shown that sampling should be done by Sequential Bootstrapping.
 SequentiallyBootstrappedBaggingClassifier and SequentiallyBootstrappedBaggingRegressor extend `sklearn <https://scikit-learn.org/>`_'s

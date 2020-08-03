@@ -1,8 +1,8 @@
 .. _implementations-feature_clusters:
 
-================
-Feature Clusters
-================
+==================
+£ Feature Clusters
+==================
 
 This module implements the clustering of features to generate a feature subset described in the book Machine Learning for
 Asset Manager (snippet 6.5.2.1 page-85). This subsets can be further utilised for getting Clustered Feature Importance

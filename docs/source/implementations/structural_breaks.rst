@@ -1,8 +1,8 @@
 .. _implementations-structural_breaks:
 
-=================
-Structural Breaks
-=================
+===================
+£ Structural Breaks
+===================
 
 This implementation is based on Chapter 17 of the book Advances in Financial Machine Learning. Structural breaks, like
 the transition from one market regime to another, represent the shift in the behaviour of market participants.

@@ -1,8 +1,8 @@
 .. _implementations-filters:
 
-=======
-Filters
-=======
+=========
+£ Filters
+=========
 
 Filters are used to filter events based on some kind of trigger. For example a structural break filter can be
 used to filter events where a structural break occurs. In Triple-Barrier labeling, this event is then used to measure

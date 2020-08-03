@@ -1,8 +1,8 @@
  .. _implementations-clustering:
 
-================================
-Optimal Number of Clusters (ONC)
-================================
+==================================
+£ Optimal Number of Clusters (ONC)
+==================================
 
 The ONC algorithm detects the optimal number of K-Means clusters using a correlation matrix as input.
 

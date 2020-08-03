@@ -1,8 +1,8 @@
 .. _implementations-labeling_trend_scanning:
 
-==============
-Trend Scanning
-==============
+================
+£ Trend Scanning
+================
 
 .. image:: labeling_images/trend_scanning_plot.png
    :scale: 100 %
