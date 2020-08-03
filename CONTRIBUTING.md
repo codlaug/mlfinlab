@@ -2,7 +2,7 @@
 
 First off we wanted to thank you for taking the time to contribute to the project. 
 
-We make use of a [mentorship program](https://hudsonthames.org/mentorship/), which caters to ambitious students looking 
+We make use of a [Apprenticeship Program](https://hudsonthames.org/mentorship/), which caters to ambitious students looking 
 to make an impact on open-source and develop a portfolio of work based on financial machine learning.
 
 This allows us to establish organised collaboration and control the level of code quality. 
@@ -34,5 +34,7 @@ The channel has the following benefits:
 * Occasional presentations on topics within financial machine learning.
 * A papers channel where we share the papers which are freely available.
 * Access to members of our research group.
+ 
+You can also email us at research@hudsonthames.org
  
 Looking forward to hearing from you!
