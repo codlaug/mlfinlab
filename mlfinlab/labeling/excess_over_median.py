@@ -4,7 +4,7 @@ Return in excess of median method.
 Described in "The benefits of tree-based models for stock selection", Zhu et al. (2012). Data labeled this way can be
 used in regression and classification models to predict stock returns over market.
 """
-
+import numpy as np
 
 def excess_over_median(prices, binary=False, resample_by=None, lag=True):
     """

@@ -1,6 +1,7 @@
 """
 Various volatility estimators
 """
+import pandas as pd
 
 
 def get_daily_vol(close, lookback=100):

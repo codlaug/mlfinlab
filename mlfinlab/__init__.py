@@ -5,7 +5,6 @@ reproducible, interpretable, and easy to use tools.
 Adding MlFinLab to your companies pipeline is like adding a department of PhD researchers to your team.
 """
 
-import mlfinlab.cross_validation as cross_validation
 import mlfinlab.data_structures as data_structures
 import mlfinlab.datasets as datasets
 import mlfinlab.multi_product as multi_product

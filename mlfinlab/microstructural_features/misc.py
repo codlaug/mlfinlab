@@ -1,6 +1,7 @@
 """
 Various miscellaneous microstructural features (VWAP, average tick size)
 """
+import numpy as np
 
 
 def vwap(dollar_volume: list, volume: list) -> float:

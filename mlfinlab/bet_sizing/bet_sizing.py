@@ -2,6 +2,13 @@
 This module contains functionality for determining bet sizes for investments based on machine learning predictions.
 These implementations are based on bet sizing approaches described in Chapter 10.
 """
+import numpy as np
+import pandas as pd
+from scipy.stats import norm, moment
+
+from mlfinlab.bet_sizing.ch10_snippets import get_signal, avg_active_signals, discrete_signal
+from mlfinlab.bet_sizing.ch10_snippets import get_w, get_target_pos, limit_price, bet_size
+from mlfinlab.bet_sizing.ef3m import M2N, raw_moment
 
 
 def bet_size_probability(events, prob, num_classes, pred=None, step_size=0.0, average_active=False, num_threads=1):

@@ -1,6 +1,9 @@
 """
 Logic regarding sequential bootstrapping from chapter 4.
 """
+import pandas as pd
+import numpy as np
+from numba import jit, prange
 
 
 def get_ind_matrix(samples_info_sets, price_bars):

@@ -1,6 +1,9 @@
 """
 Implementation of Chu-Stinchcombe-White test
 """
+import pandas as pd
+import numpy as np
+from mlfinlab.util import mp_pandas_obj
 
 
 def get_chu_stinchcombe_white_statistics(series: pd.Series, test_type: str = 'one_sided',

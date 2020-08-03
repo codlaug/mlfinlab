@@ -2,6 +2,10 @@
 Implementation of Trend-Scanning labels described in `Advances in Financial Machine Learning: Lecture 3/10
 <https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2708678>`_
 """
+import pandas as pd
+import numpy as np
+
+from mlfinlab.structural_breaks.sadf import get_betas
 
 
 def trend_scanning_labels(price_series: pd.Series, t_events: list = None, look_forward_window: int = 20,

@@ -4,6 +4,14 @@ Detection of False Investment Strategies using Unsupervised Learning Methods
 https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3167017
 """
 
+from typing import Union
+
+import numpy as np
+import pandas as pd
+
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_samples
+
 
 def cluster_kmeans_top(corr_mat: pd.DataFrame, repeat: int = 10) -> Union[pd.DataFrame, dict, pd.Series, bool]:
     """

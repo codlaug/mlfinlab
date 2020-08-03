@@ -4,6 +4,17 @@ Slides) by Dr. Marcos Lopez de Prado. https://papers.ssrn.com/sol3/papers.cfm?ab
 in the book Machine Learning for Asset Managers Snippet 6.5.2 page 84.
 """
 
+#Imports
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+from scipy.spatial.distance import squareform
+from scipy.cluster.hierarchy import linkage, fcluster
+from statsmodels.regression.linear_model import OLS
+
+from mlfinlab.clustering.onc import get_onc_clusters
+from mlfinlab.codependence.codependence_matrix import get_dependence_matrix, get_distance_matrix
+
 
 def get_feature_clusters(X: pd.DataFrame, dependence_metric: str, distance_metric: str = None,
                          linkage_method: str = None, n_clusters: int = None, critical_threshold: float = 0.0) -> list:

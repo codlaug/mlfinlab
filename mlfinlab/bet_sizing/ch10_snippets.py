@@ -4,6 +4,12 @@ Marcos López de Prado. The code has been amended for readability, to conform to
 manageable single-units of functionality, as well as to account for deprecation of functions originally used, but is
 otherwise unaltered.
 """
+import warnings
+import pandas as pd
+import numpy as np
+from scipy.stats import norm
+
+from mlfinlab.util.multiprocess import mp_pandas_obj
 
 
 def get_signal(prob, num_classes, pred=None):

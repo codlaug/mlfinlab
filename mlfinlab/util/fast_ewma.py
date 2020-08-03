@@ -4,7 +4,7 @@ The inspiration and context for this code was from a blog post by writen by Maks
 https://towardsdatascience.com/financial-machine-learning-part-0-bars-745897d4e4ba
 """
 
-@jit((float64[:], int64), nopython=False, nogil=True)
+
 def ewma(arr_in, window):  # pragma: no cover
     """
     Exponentially weighted moving average specified by a decay ``window`` to provide better adjustments for

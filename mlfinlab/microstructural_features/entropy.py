@@ -1,6 +1,11 @@
 """
 Entropy calculation module (Shannon, Lempel-Ziv, Plug-In, Konto)
 """
+import math
+from typing import Union
+
+import numpy as np
+from numba import njit
 
 
 def get_shannon_entropy(message: str) -> float:

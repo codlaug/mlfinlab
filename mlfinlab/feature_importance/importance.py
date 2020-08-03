@@ -3,6 +3,12 @@ Module which implements feature importance algorithms as described in Chapter 8 
 Learning and Clustered Feature Importance algorithms as described in Chapter 6 Section 6.5.2 of Machine Learning for
 Asset Managers.
 """
+import pandas as pd
+import numpy as np
+from sklearn.metrics import log_loss
+import matplotlib.pyplot as plt
+
+from mlfinlab.cross_validation.cross_validation import ml_cross_val_score
 
 
 def mean_decrease_impurity(model, feature_names, clustered_subsets=None):

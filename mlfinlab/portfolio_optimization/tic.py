@@ -1,3 +1,8 @@
+import numpy as np
+import pandas as pd
+import scipy.spatial.distance as ssd
+import scipy.cluster.hierarchy as sch
+from mlfinlab.portfolio_optimization.risk_estimators import RiskEstimators
 
 
 class TIC:

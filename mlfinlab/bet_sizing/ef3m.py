@@ -3,6 +3,13 @@ An implementation of the Exact Fit of the first 3 Moments (EF3M) of finding the 
 of 2 Gaussian distributions. Based on the work by Lopez de Prado and Foreman (2014) "A mixture of two Gaussians
 approach to mathematical portfolio oversight: The EF3M algorithm." Quantitative Finance, Vol. 14, No. 5, pp. 913-930.
 """
+import sys
+from multiprocessing import cpu_count, Pool
+import numpy as np
+import pandas as pd
+from scipy.special import comb
+from scipy.stats import gaussian_kde
+from numba import njit, objmode
 
 
 class M2N:

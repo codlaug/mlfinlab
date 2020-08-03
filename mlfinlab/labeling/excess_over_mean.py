@@ -3,6 +3,8 @@ Return in excess of mean method.
 
 Chapter 5, Machine Learning for Factor Investing, by Coqueret and Guida, (2020).
 """
+import numpy as np
+
 
 def excess_over_mean(prices, binary=False, resample_by=None, lag=True):
     """

@@ -2,6 +2,27 @@
 Implementation of Sequentially Bootstrapped Bagging Classifier using sklearn's library as base class
 """
 
+import numbers
+import itertools
+from warnings import warn
+from abc import ABCMeta, abstractmethod
+import pandas as pd
+import numpy as np
+
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+from sklearn.ensemble import BaggingClassifier, BaggingRegressor
+from sklearn.ensemble._bagging import BaseBagging
+from sklearn.ensemble._base import _partition_estimators
+from sklearn.base import ClassifierMixin, RegressorMixin
+from sklearn.utils.random import sample_without_replacement
+from sklearn.utils import indices_to_mask
+from sklearn.metrics import accuracy_score, r2_score
+from sklearn.utils.validation import has_fit_parameter
+from sklearn.utils import check_random_state, check_array, check_consistent_length, check_X_y
+from sklearn.utils._joblib import Parallel, delayed
+
+from mlfinlab.sampling.bootstrapping import seq_bootstrap, get_ind_matrix
+
 MAX_INT = np.iinfo(np.int32).max
 
 

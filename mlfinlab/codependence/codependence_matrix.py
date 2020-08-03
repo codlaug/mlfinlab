@@ -4,6 +4,13 @@ Codependence  described in Cornell lecture notes on Codependence:
 https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3512994&download=yes
 """
 
+import numpy as np
+import pandas as pd
+
+from mlfinlab.codependence.information import variation_of_information_score, get_mutual_info
+from mlfinlab.codependence.correlation import distance_correlation
+from mlfinlab.codependence.gnpr_distance import spearmans_rho, gpr_distance, gnpr_distance
+
 
 def get_dependence_matrix(df: pd.DataFrame, dependence_method: str, theta: float = 0.5,
                           bandwidth: float = 0.01) -> pd.DataFrame:

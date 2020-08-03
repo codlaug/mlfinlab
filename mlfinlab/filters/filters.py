@@ -4,6 +4,9 @@ used to filter events where a structural break occurs. This event is then used t
 to some event horizon, say a day.
 """
 
+import numpy as np
+import pandas as pd
+
 
 # Snippet 2.4, page 39, The Symmetric CUSUM Filter.
 def cusum_filter(raw_time_series, threshold, time_stamps=True):

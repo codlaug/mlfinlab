@@ -3,6 +3,9 @@ Correlation based distances and various modifications (angular, absolute, square
 Codependence: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3512994&download=yes
 """
 
+import numpy as np
+from scipy.spatial.distance import squareform, pdist
+
 
 def angular_distance(x: np.array, y: np.array) -> float:
     """

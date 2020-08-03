@@ -3,6 +3,10 @@ Implementations of mutual information (I) and variation of information (VI) code
 lecture slides: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3512994&download=yes
 """
 
+import numpy as np
+import scipy.stats as ss
+from sklearn.metrics import mutual_info_score
+
 
 def get_optimal_number_of_bins(num_obs: int, corr_coef: float = None) -> int:
     """

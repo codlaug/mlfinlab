@@ -1,6 +1,9 @@
 """
 Module which implements feature PCA compression and PCA analysis of feature importance.
 """
+import pandas as pd
+import numpy as np
+from scipy.stats import weightedtau, kendalltau, spearmanr, pearsonr
 
 
 def get_orthogonal_features(feature_df, variance_thresh=.95, num_features=None):

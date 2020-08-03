@@ -3,6 +3,12 @@ Implementation of an algorithm described in Yimou Li, David Turkington, Alireza 
 'Beyond the Black Box: An Intuitive Approach to Investment Prediction with Machine Learning'
 (https://jfds.pm-research.com/content/early/2019/12/11/jfds.2019.1.023)
 """
+from abc import ABC, abstractmethod
+from typing import Tuple
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
 
 
 class AbstractModelFingerprint(ABC):

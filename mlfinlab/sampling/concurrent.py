@@ -1,6 +1,9 @@
 """
 Logic regarding concurrent labels from chapter 4.
 """
+import pandas as pd
+
+from mlfinlab.util.multiprocess import mp_pandas_obj
 
 
 def num_concurrent_events(close_series_index, label_endtime, molecule):

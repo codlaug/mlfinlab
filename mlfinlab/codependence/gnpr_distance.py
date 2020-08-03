@@ -4,6 +4,9 @@ clustering of financial time series and applications to credit default swaps" by
 https://www.researchgate.net/publication/322714557
 """
 
+import numpy as np
+from scipy.stats import spearmanr
+
 
 def spearmans_rho(x: np.array, y: np.array) -> float:
     """

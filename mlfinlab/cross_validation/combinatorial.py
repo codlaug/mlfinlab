@@ -1,6 +1,15 @@
 """
 Implements the Combinatorial Purged Cross-Validation class from Chapter 12
 """
+from itertools import combinations
+from typing import List
+
+import pandas as pd
+import numpy as np
+
+from scipy.special import comb
+from sklearn.model_selection import KFold
+from .cross_validation import ml_get_train_times
 
 
 class CombinatorialPurgedKFold(KFold):

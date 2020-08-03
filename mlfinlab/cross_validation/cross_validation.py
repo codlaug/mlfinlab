@@ -1,6 +1,14 @@
 """
 Implements the book chapter 7 on Cross Validation for financial data.
 """
+from typing import Callable
+import pandas as pd
+import numpy as np
+
+from sklearn.metrics import log_loss
+from sklearn.model_selection import KFold
+from sklearn.base import ClassifierMixin
+from sklearn.model_selection import BaseCrossValidator
 
 
 def ml_get_train_times(samples_info_sets: pd.Series, test_times: pd.Series) -> pd.Series:
@@ -56,14 +64,7 @@ class PurgedKFold(KFold):
 
 
 # noinspection PyPep8Naming
-def ml_cross_val_score(
-        classifier: ClassifierMixin,
-        X: pd.DataFrame,
-        y: pd.Series,
-        cv_gen: BaseCrossValidator,
-        sample_weight_train: np.ndarray = None,
-        sample_weight_score: np.ndarray = None,
-        scoring: Callable[[np.array, np.array], float] = log_loss):
+def ml_cross_val_score( classifier, X, y, cv_gen, sample_weight_train, sample_weight_score, scoring):
     """
     Advances in Financial Machine Learning, Snippet 7.4, page 110.
 
