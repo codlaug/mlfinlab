@@ -5,6 +5,9 @@ Work "Classification-based Financial Markets Prediction using Deep Neural Networ
 labeling data this way can be used in training deep neural networks to predict price movements.
 """
 
+import warnings
+import pandas as pd
+
 
 def fixed_time_horizon(prices, threshold=0, resample_by=None, lag=True, standardized=False, window=None):
     """
@@ -34,4 +37,39 @@ def fixed_time_horizon(prices, threshold=0, resample_by=None, lag=True, standard
                     less/between/greater than the threshold at each corresponding time index. First or last row will be
                     NaN, depending on lag.
     """
-    pass
+    # Apply resample period, if applicable.
+    if resample_by is not None:
+        prices = prices.resample(resample_by).last()
+
+    # Calculate returns.
+    if lag:
+        returns = prices.pct_change(1).shift(-1)
+    else:
+        returns = prices.pct_change(1)
+
+    # If threshold is pd.Series, its index must patch prices.index; otherwise labels will fail to return.
+    if isinstance(threshold, pd.Series):
+        assert threshold.index.equals(prices.index), "prices.index and threshold.index must match! If prices are " \
+                                                     "resampled, the threshold index must match the resampled prices " \
+                                                     "index."
+
+    # Adjust by mean and stdev, if desired. Assert that window must exist if standardization is on. Warning if window
+    # is too large.
+    if standardized:
+        assert isinstance(window, int), "When standardized is True, window must be int."
+        if window >= len(returns):
+            warnings.warn('window is greater than the length of the Series. All labels will be NaN.', UserWarning)
+
+        # Apply standardization.
+        mean = returns.rolling(window=window).mean()
+        stdev = returns.rolling(window=window).std()
+        returns -= mean
+        returns /= stdev
+
+    # Apply labeling.
+    labels = returns.copy()  # Copy returns so labels aren't all 0 when threshold => 1.
+    labels[returns.lt(-threshold, axis=0)] = -1
+    labels[returns.gt(threshold, axis=0)] = 1
+    labels[(returns.ge(-threshold, axis=0)) & (returns.le(threshold, axis=0))] = 0
+
+    return labels

@@ -4,6 +4,8 @@ Labeling Raw Returns.
 Most basic form of labeling based on raw return of each observation relative to its previous value.
 """
 
+import numpy as np
+
 
 def raw_return(prices, binary=False, logarithmic=False, resample_by=None, lag=True):
     """
@@ -24,4 +26,24 @@ def raw_return(prices, binary=False, logarithmic=False, resample_by=None, lag=Tr
     :return:  (pd.Series or pd.DataFrame) Raw returns on market data. User can specify whether returns will be based on
                 simple or logarithmic return, and whether the output will be numerical or categorical.
     """
-    pass
+    # Apply resample, if applicable.
+    if resample_by is not None:
+        prices = prices.resample(resample_by).last()
+
+    # Get return per period.
+    if logarithmic:  # Log returns
+        if lag:
+            returns = np.log(prices).diff().shift(-1)
+        else:
+            returns = np.log(prices).diff()
+    else:  # Simple returns
+        if lag:
+            returns = prices.pct_change(periods=1).shift(-1)
+        else:
+            returns = prices.pct_change(periods=1)
+
+    # Return sign only if categorical labels desired.
+    if binary:
+        returns = returns.apply(np.sign)
+
+    return returns

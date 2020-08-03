@@ -27,7 +27,26 @@ def timing_of_flattening_and_flips(target_positions: pd.Series) -> pd.DatetimeIn
     :param target_positions: (pd.Series) Target position series with timestamps as indices
     :return: (pd.DatetimeIndex) Timestamps of trades flattening, flipping and last bet
     """
-    pass
+
+    empty_positions = target_positions[(target_positions == 0)].index  # Empty positions index
+    previous_positions = target_positions.shift(1)  # Timestamps pointing at previous positions
+
+    # Index of positions where previous one wasn't empty
+    previous_positions = previous_positions[(previous_positions != 0)].index
+
+    # FLATTENING - if previous position was open, but current is empty
+    flattening = empty_positions.intersection(previous_positions)
+
+    # Multiplies current position with value of next one
+    multiplied_posions = target_positions.iloc[1:] * target_positions.iloc[:-1].values
+
+    # FLIPS - if current position has another direction compared to the next
+    flips = multiplied_posions[(multiplied_posions < 0)].index
+    flips_and_flattenings = flattening.union(flips).sort_values()
+    if target_positions.index[-1] not in flips_and_flattenings:  # Appending with last bet
+        flips_and_flattenings = flips_and_flattenings.append(target_positions.index[-1:])
+
+    return flips_and_flattenings
 
 
 def average_holding_period(target_positions: pd.Series) -> float:
@@ -47,7 +66,43 @@ def average_holding_period(target_positions: pd.Series) -> float:
     :param target_positions: (pd.Series) Target position series with timestamps as indices
     :return: (float) Estimated average holding period, NaN if zero or unpredicted
     """
-    pass
+
+    holding_period = pd.DataFrame(columns=['holding_time', 'weight'])
+    entry_time = 0
+    position_difference = target_positions.diff()
+
+    # Time elapsed from the starting time for each position
+    time_difference = (target_positions.index - target_positions.index[0]) / np.timedelta64(1, 'D')
+    for i in range(1, target_positions.size):
+
+        # Increased or unchanged position
+        if float(position_difference.iloc[i] * target_positions.iloc[i - 1]) >= 0:
+            if float(target_positions.iloc[i]) != 0:  # And not an empty position
+                entry_time = (entry_time * target_positions.iloc[i - 1] +
+                              time_difference[i] * position_difference.iloc[i]) / target_positions.iloc[i]
+
+        # Decreased
+        if float(position_difference.iloc[i] * target_positions.iloc[i - 1]) < 0:
+            hold_time = time_difference[i] - entry_time
+
+            # Flip of a position
+            if float(target_positions.iloc[i] * target_positions.iloc[i - 1]) < 0:
+                weight = abs(target_positions.iloc[i - 1])
+                holding_period.loc[target_positions.index[i], ['holding_time', 'weight']] = (hold_time, weight)
+                entry_time = time_difference[i]  # Reset entry time
+
+            # Only a part of position is closed
+            else:
+                weight = abs(position_difference.iloc[i])
+                holding_period.loc[target_positions.index[i], ['holding_time', 'weight']] = (hold_time, weight)
+
+    if float(holding_period['weight'].sum()) > 0:  # If there were closed trades at all
+        avg_holding_period = float((holding_period['holding_time'] * \
+                                    holding_period['weight']).sum() / holding_period['weight'].sum())
+    else:
+        avg_holding_period = float('nan')
+
+    return avg_holding_period
 
 
 def bets_concentration(returns: pd.Series) -> float:
@@ -62,7 +117,14 @@ def bets_concentration(returns: pd.Series) -> float:
     :param returns: (pd.Series) Returns from bets
     :return: (float) Concentration of returns (nan if less than 3 returns)
     """
-    pass
+
+    if returns.size <= 2:
+        return float('nan')  # If less than 3 bets
+    weights = returns / returns.sum()  # Weights of each bet
+    hhi = (weights ** 2).sum()  # Herfindahl-Hirschman Index for weights
+    hhi = float((hhi - returns.size ** (-1)) / (1 - returns.size ** (-1)))
+
+    return hhi
 
 
 def all_bets_concentration(returns: pd.Series, frequency: str = 'M') -> tuple:
@@ -85,7 +147,17 @@ def all_bets_concentration(returns: pd.Series, frequency: str = 'M') -> tuple:
     :param frequency: (str) Desired time grouping frequency from pd.Grouper
     :return: (tuple of floats) Concentration of positive, negative and time grouped concentrations
     """
-    pass
+
+    # Concentration of positive returns per bet
+    positive_concentration = bets_concentration(returns[returns >= 0])
+
+    # Concentration of negative returns per bet
+    negative_concentration = bets_concentration(returns[returns < 0])
+
+    # Concentration of bets/time period (month by default)
+    time_concentration = bets_concentration(returns.groupby(pd.Grouper(freq=frequency)).count())
+
+    return (positive_concentration, negative_concentration, time_concentration)
 
 
 def drawdown_and_time_under_water(returns: pd.Series, dollars: bool = False) -> tuple:
@@ -113,7 +185,33 @@ def drawdown_and_time_under_water(returns: pd.Series, dollars: bool = False) -> 
                     If dollars, then drawdowns are in dollars, else as a %.
     :return: (tuple of pd.Series) Series of drawdowns and time under water
     """
-    pass
+
+    frame = returns.to_frame('pnl')
+    frame['hwm'] = returns.expanding().max()  # Adding high watermarks as column
+
+    # Grouped as min returns by high watermarks
+    high_watermarks = frame.groupby('hwm').min().reset_index()
+    high_watermarks.columns = ['hwm', 'min']
+
+    # Time high watermark occurred
+    high_watermarks.index = frame['hwm'].drop_duplicates(keep='first').index
+
+    # Picking ones that had a drawdown after high watermark
+    high_watermarks = high_watermarks[high_watermarks['hwm'] > high_watermarks['min']]
+    if dollars:
+        drawdown = high_watermarks['hwm'] - high_watermarks['min']
+    else:
+        drawdown = 1 - high_watermarks['min'] / high_watermarks['hwm']
+
+    time_under_water = ((high_watermarks.index[1:] - high_watermarks.index[:-1]) / np.timedelta64(1, 'Y')).values
+
+    # Adding also period from last High watermark to last return observed.
+    time_under_water = np.append(time_under_water,
+                                 (returns.index[-1] - high_watermarks.index[-1]) / np.timedelta64(1, 'Y'))
+
+    time_under_water = pd.Series(time_under_water, index=high_watermarks.index)
+
+    return drawdown, time_under_water
 
 
 def sharpe_ratio(returns: pd.Series, entries_per_year: int = 252, risk_free_rate: float = 0) -> float:
@@ -129,7 +227,10 @@ def sharpe_ratio(returns: pd.Series, entries_per_year: int = 252, risk_free_rate
     :param risk_free_rate: (float) Risk-free rate (0 by default)
     :return: (float) Annualized Sharpe ratio
     """
-    pass
+
+    sharpe_r = (returns.mean() - risk_free_rate) / returns.std() * (entries_per_year) ** (1 / 2)
+
+    return sharpe_r
 
 
 def information_ratio(returns: pd.Series, benchmark: float = 0, entries_per_year: int = 252) -> float:
@@ -149,7 +250,11 @@ def information_ratio(returns: pd.Series, benchmark: float = 0, entries_per_year
     :param entries_per_year: (int) Times returns are recorded per year (252 by default)
     :return: (float) Annualized information ratio
     """
-    pass
+
+    excess_returns = returns - benchmark
+    information_r = sharpe_ratio(excess_returns, entries_per_year)
+
+    return information_r
 
 
 def probabilistic_sharpe_ratio(observed_sr: float, benchmark_sr: float, number_of_returns: int,
@@ -171,7 +276,26 @@ def probabilistic_sharpe_ratio(observed_sr: float, benchmark_sr: float, number_o
     :param kurtosis_of_returns: (float) Kurtosis of returns (3 by default)
     :return: (float) Probabilistic Sharpe ratio
     """
-    pass
+
+    test_value = ((observed_sr - benchmark_sr) * np.sqrt(number_of_returns - 1)) / \
+                  ((1 - skewness_of_returns * observed_sr + (kurtosis_of_returns - 1) / \
+                    4 * observed_sr ** 2)**(1 / 2))
+
+    if np.isnan(test_value):
+        warnings.warn('Test value is nan. Please check the input values.', UserWarning)
+        return test_value
+
+    if isinstance(test_value, complex):
+        warnings.warn('Output is a complex number. You may want to check the input skewness (too high), '
+                      'kurtosis (too low), or observed_sr values.', UserWarning)
+
+    if np.isinf(test_value):
+        warnings.warn('Test value is infinite. You may want to check the input skewness, '
+                      'kurtosis, or observed_sr values.', UserWarning)
+
+    probab_sr = ss.norm.cdf(test_value)
+
+    return probab_sr
 
 
 def deflated_sharpe_ratio(observed_sr: float, sr_estimates: list, number_of_returns: int,
@@ -202,7 +326,26 @@ def deflated_sharpe_ratio(observed_sr: float, sr_estimates: list, number_of_retu
     :param benchmark_out: (bool) Flag to output the calculated benchmark instead of DSR
     :return: (float) Deflated Sharpe ratio or Benchmark SR (if benchmark_out)
     """
-    pass
+
+    # Calculating benchmark_SR from the parameters of estimates
+    if estimates_param:
+        benchmark_sr = sr_estimates[0] * \
+                       ((1 - np.euler_gamma) * ss.norm.ppf(1 - 1 / sr_estimates[1]) +
+                        np.euler_gamma * ss.norm.ppf(1 - 1 / sr_estimates[1] * np.e ** (-1)))
+
+    # Calculating benchmark_SR from a list of estimates
+    else:
+        benchmark_sr = np.array(sr_estimates).std() * \
+                       ((1 - np.euler_gamma) * ss.norm.ppf(1 - 1 / len(sr_estimates)) +
+                        np.euler_gamma * ss.norm.ppf(1 - 1 / len(sr_estimates) * np.e ** (-1)))
+
+    deflated_sr = probabilistic_sharpe_ratio(observed_sr, benchmark_sr, number_of_returns,
+                                             skewness_of_returns, kurtosis_of_returns)
+
+    if benchmark_out:
+        return benchmark_sr
+
+    return deflated_sr
 
 
 def minimum_track_record_length(observed_sr: float, benchmark_sr: float,
@@ -227,4 +370,9 @@ def minimum_track_record_length(observed_sr: float, benchmark_sr: float,
     :param alpha: (float) Desired significance level (0.05 by default)
     :return: (float) Minimum number of track records
     """
-    pass
+
+    track_rec_length = 1 + (1 - skewness_of_returns * observed_sr +
+                            (kurtosis_of_returns - 1) / 4 * observed_sr ** 2) * \
+                       (ss.norm.ppf(1 - alpha) / (observed_sr - benchmark_sr)) ** (2)
+
+    return track_rec_length
