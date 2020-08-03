@@ -2,12 +2,11 @@
 Correlation based distances and various modifications (angular, absolute, squared) described in Cornell lecture notes:
 Codependence: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3512994&download=yes
 """
-
 import numpy as np
 from scipy.spatial.distance import squareform, pdist
 
 
-def angular_distance(x: np.array, y: np.array) -> float:
+def angular_distance(x, y):
     """
     Returns angular distance between two vectors. Angular distance is a slight modification of Pearson correlation which
     satisfies metric conditions.
@@ -26,7 +25,7 @@ def angular_distance(x: np.array, y: np.array) -> float:
     pass
 
 
-def absolute_angular_distance(x: np.array, y: np.array) -> float:
+def absolute_angular_distance(x, y):
     """
     Returns absolute angular distance between two vectors. It is a modification of angular distance where the absolute
     value of the Pearson correlation coefficient is used.
@@ -45,7 +44,7 @@ def absolute_angular_distance(x: np.array, y: np.array) -> float:
     pass
 
 
-def squared_angular_distance(x: np.array, y: np.array) -> float:
+def squared_angular_distance(x, y):
     """
     Returns squared angular distance between two vectors. It is a modification of angular distance where the square of
     Pearson correlation coefficient is used.
@@ -64,7 +63,7 @@ def squared_angular_distance(x: np.array, y: np.array) -> float:
     pass
 
 
-def distance_correlation(x: np.array, y: np.array) -> float:
+def distance_correlation(x, y):
     """
     Returns distance correlation between two vectors. Distance correlation captures both linear and non-linear
     dependencies.

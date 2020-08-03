@@ -4,6 +4,9 @@
    The following implementations and documentation closely follow the work of Gautier Marti:
    `Some contributions to the clustering of financial time series and applications to credit default swaps <https://www.researchgate.net/publication/322714557>`_.
 
+
+.. py:currentmodule:: mlfinlab.codependence.gnpr_distance
+
 =====================
 Codependence by Marti
 =====================
@@ -62,8 +65,6 @@ please visit `scipy documentation <https://docs.scipy.org/doc/scipy-0.14.0/refer
 
 Implementation
 ##############
-
-.. py:currentmodule:: mlfinlab.codependence.gnpr_distance
 
 .. autofunction:: spearmans_rho
 

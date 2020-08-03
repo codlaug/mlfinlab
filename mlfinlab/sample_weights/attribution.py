@@ -9,6 +9,21 @@ from mlfinlab.sampling.concurrent import num_concurrent_events, get_av_uniquenes
 from mlfinlab.util.multiprocess import mp_pandas_obj
 
 
+def _apply_weight_by_return(label_endtime, num_conc_events, close_series, molecule):
+    """
+    Advances in Financial Machine Learning, Snippet 4.10, page 69.
+    Determination of Sample Weight by Absolute Return Attribution
+    Derives sample weights based on concurrency and return. Works on a set of
+    datetime index values (molecule). This allows the program to parallelize the processing.
+    :param label_endtime: (pd.Series) Label endtime series (t1 for triple barrier events)
+    :param num_conc_events: (pd.Series) Number of concurrent labels (output from num_concurrent_events function).
+    :param close_series: (pd.Series) Close prices
+    :param molecule: (an array) A set of datetime index values for processing.
+    :return: (pd.Series) Sample weights based on number return and concurrency for molecule
+    """
+    pass
+
+
 def get_weights_by_return(triple_barrier_events, close_series, num_threads=5, verbose=True):
     """
     Advances in Financial Machine Learning, Snippet 4.10(part 2), page 69.

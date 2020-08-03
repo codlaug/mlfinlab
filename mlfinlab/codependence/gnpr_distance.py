@@ -3,9 +3,9 @@ Implementation of distance using the Generic Non-Parametric Representation appro
 clustering of financial time series and applications to credit default swaps" by Gautier Marti
 https://www.researchgate.net/publication/322714557
 """
-
 import numpy as np
-from scipy.stats import spearmanr
+
+# pylint: disable=invalid-name
 
 
 def spearmans_rho(x: np.array, y: np.array) -> float:
@@ -34,18 +34,14 @@ def spearmans_rho(x: np.array, y: np.array) -> float:
 def gpr_distance(x: np.array, y: np.array, theta: float) -> float:
     """
     Calculates the distance between two Gaussians under the Generic Parametric Representation (GPR) approach.
-
     According to the original work https://www.researchgate.net/publication/322714557 (p.70):
     "This is a fast and good proxy for distance d_theta when the first two moments ... predominate". But it's not
     a good metric for heavy-tailed distributions.
-
     Parameter theta defines what type of information dependency is being tested:
     - for theta = 0 the distribution information is tested
     - for theta = 1 the dependence information is tested
     - for theta = 0.5 a mix of both information types is tested
-
     With theta in [0, 1] the distance lies in range [0, 1] and is a metric. (See original work for proof, p.71)
-
     :param x: (np.array/pd.Series) X vector.
     :param y: (np.array/pd.Series) Y vector (same number of observations as X).
     :param theta: (float) Type of information being tested. Falls in range [0, 1].
@@ -59,20 +55,17 @@ def gnpr_distance(x: np.array, y: np.array, theta: float, bandwidth: float = 0.0
     """
     Calculates the empirical distance between two random variables under the Generic Non-Parametric Representation
     (GNPR) approach.
-
     Formula for the distance is taken from https://www.researchgate.net/publication/322714557 (p.72).
-
     Parameter theta defines what type of information dependency is being tested:
     - for theta = 0 the distribution information is tested
     - for theta = 1 the dependence information is tested
     - for theta = 0.5 a mix of both information types is tested
-
     With theta in [0, 1] the distance lies in the range [0, 1] and is a metric. (See original work for proof, p.71)
-
     :param x: (np.array/pd.Series) X vector.
     :param y: (np.array/pd.Series) Y vector (same number of observations as X).
     :param theta: (float) Type of information being tested. Falls in range [0, 1].
     :param bandwidth: (float) Bandwidth to use for splitting the X and Y vector observations. (0.01 by default)
     :return: (float) Distance under GNPR approach.
     """
+
     pass
